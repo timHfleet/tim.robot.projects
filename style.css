@@ -105,6 +105,18 @@ main > section { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
   gap: 2.5rem;
   padding: 5rem 0 3rem;
 }
+.who { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  padding: 3px;
+  background: conic-gradient(from 200deg, var(--cyan), #0891b2, var(--orange), var(--cyan));
+  box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.45);
+}
+.who-name { margin: 0; font: 600 1.15rem "Space Grotesk", sans-serif; color: #fff; }
+.who-role { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.92rem; }
 .lead { color: #c3cddd; font-size: 1.1rem; margin: 1.25rem 0 1.75rem; max-width: 38rem; }
 .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .socials { display: flex; flex-wrap: wrap; gap: 1.25rem; padding: 0; margin: 1.75rem 0 0; list-style: none; font-size: 0.95rem; }
@@ -229,6 +241,7 @@ main > section { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
     radial-gradient(600px 220px at 50% 0%, rgba(34, 211, 238, 0.12), transparent 70%),
     var(--card);
 }
+.avatar-lg { width: 112px; height: 112px; display: block; margin: 0 auto 1.25rem; }
 .contact p { color: #c3cddd; max-width: 36rem; margin: 0.9rem auto 1.6rem; }
 .contact .cta { justify-content: center; }
 
