@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timothy Herrera · Robotics Operations</title>
+<meta name="description" content="Timothy Herrera: robotics operations lead (150-robot humanoid fleet) who builds fleet dashboards and robot arm simulators.">
+<meta property="og:title" content="Timothy Herrera · Robotics Operations">
+<meta property="og:description" content="Ran the floor for a 150-robot humanoid fleet. Builds fleet dashboards and robot arm simulators.">
+<meta property="og:image" content="assets/arm-sim.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1220'/%3E%3Cpath d='M8 24 L14 13 L24 9' stroke='%2322d3ee' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='14' cy='13' r='2.6' fill='%23f97316'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="Back to top"><span class="brand-mark">TH</span><span class="brand-name">Timothy Herrera</span></a>
+  <nav>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+    <a class="btn btn-small" href="assets/Timothy_Herrera_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Robotics Operations · Fleet Ops · Builder</p>
+      <h1>I keep robots running, and I build the tools that help.</h1>
+      <p class="lead">
+        I ran day-to-day floor operations for a robot data-collection team and kept a <b>150-robot humanoid fleet</b>
+        deploy-ready at an AI robotics startup in San Francisco. Now I build the software I wished I'd had on the floor:
+        fleet dashboards and robot-arm simulators.
+      </p>
+      <div class="cta">
+        <a class="btn" href="#projects">See my projects</a>
+        <a class="btn btn-ghost" href="assets/Timothy_Herrera_Resume.pdf" target="_blank" rel="noopener">Download resume</a>
+      </div>
+      <ul class="socials">
+        <li><a href="https://linkedin.com/in/timothy-herrera" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://github.com/timHfleet" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="mailto:timdayaherrera@gmail.com">Email</a></li>
+        <li class="muted">San Francisco, CA</li>
+      </ul>
+    </div>
+    <figure class="hero-arm">
+      <canvas id="arm" aria-label="A robot arm that reaches toward your cursor using inverse kinematics"></canvas>
+      <figcaption>Move your mouse: this arm solves the same analytic inverse kinematics as my <a href="#arm-sim">simulator</a>.</figcaption>
+    </figure>
+  </section>
+
+  <!-- Numbers -->
+  <section class="stats" aria-label="Highlights">
+    <div><span class="num">150</span><span class="lbl">humanoid robots kept firmware-current and deploy-ready</span></div>
+    <div><span class="num">70+</span><span class="lbl">operators onboarded and trained</span></div>
+    <div><span class="num">7 mo</span><span class="lbl">from R&amp;D Operator to Shift Supervisor</span></div>
+    <div><span class="num">10+ yrs</span><span class="lbl">in data operations and QA before robotics</span></div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section">
+    <div class="section-head">
+      <p class="eyebrow">Projects</p>
+      <h2>Built from what I saw on the robot floor</h2>
+    </div>
+
+    <article class="project" id="arm-sim">
+      <a class="shot" href="https://robot-2arms-sim.onrender.com" target="_blank" rel="noopener">
+        <img src="assets/arm-sim.png" alt="Robot Arm Simulator: two robot arms folding a red T-shirt together in a 3D scene" loading="lazy">
+      </a>
+      <div class="project-body">
+        <p class="kicker">Nov 2026 · Robotics software</p>
+        <h3>Robot Arm Simulator</h3>
+        <p class="pitch">A 3D simulator for a 5-joint arm that plans pick-and-place, loads a dishwasher, and folds laundry with one arm or two.</p>
+        <ul>
+          <li>Inverse kinematics solved three ways: analytic, Jacobian (damped least squares) and CCD.</li>
+          <li>Pick-and-place like real robots run it: camera scan, close-up correction, slow final approach, grip-force sensing, and recovery from slips and drops.</li>
+          <li>Two arms share the work with a frame-by-frame collision check: the dishwasher loads <b>1.7× faster</b>, and the arms fold a T-shirt in lockstep.</li>
+        </ul>
+        <ul class="chips"><li>Python</li><li>FastAPI</li><li>NumPy</li><li>React</li><li>TypeScript</li><li>three.js</li><li>pytest · 68 tests</li></ul>
+        <div class="links">
+          <a class="btn btn-small" href="https://robot-2arms-sim.onrender.com" target="_blank" rel="noopener">Live demo</a>
+          <a class="btn btn-small btn-ghost" href="https://github.com/timHfleet/robot-simulation" target="_blank" rel="noopener">Code</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project flip" id="fleet-ops">
+      <a class="shot" href="https://robot-fleet-ops.onrender.com" target="_blank" rel="noopener">
+        <img src="assets/fleet-ops.png" alt="Robot Fleet Ops dashboard: QA pass rate, usable episodes, fleet availability and a 30-day episodes chart" loading="lazy">
+      </a>
+      <div class="project-body">
+        <p class="kicker">Nov 2026 · Operations software</p>
+        <h3>Robot Fleet Ops Metrics</h3>
+        <p class="pitch">A 12-page operations dashboard for a robot data-collection fleet, built around the KPIs I ran a shift on.</p>
+        <ul>
+          <li>QA pass rate, goal attainment, availability, MTBF/MTTR, utilization, cost per usable episode and incidents, all in one place.</li>
+          <li>An explainable predictive-maintenance score (0–100) that compares each robot's last 7 days with its own baseline and recommends an action.</li>
+          <li>A shift handoff report (Slack-ready text or PDF) and a capacity planner for how many robots can go down before output slips.</li>
+        </ul>
+        <ul class="chips"><li>Python</li><li>FastAPI</li><li>SQL</li><li>React</li><li>TypeScript</li><li>Docker</li></ul>
+        <div class="links">
+          <a class="btn btn-small" href="https://robot-fleet-ops.onrender.com" target="_blank" rel="noopener">Live demo</a>
+          <a class="btn btn-small btn-ghost" href="https://github.com/timHfleet/robot-fleet-ops" target="_blank" rel="noopener">Code</a>
+        </div>
+      </div>
+    </article>
+    <p class="note">The demos run on a free host: give them up to a minute to wake up.</p>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience" class="section">
+    <div class="section-head">
+      <p class="eyebrow">Experience</p>
+      <h2>From the data desk to the robot floor</h2>
+    </div>
+
+    <ol class="timeline">
+      <li>
+        <div class="when">Sep 2025 – Sep 2026</div>
+        <div class="what">
+          <h3>Operations Coordinator &amp; Shift Supervisor</h3>
+          <p class="org">The Bot Company · San Francisco · AI robotics, general-purpose home robot</p>
+          <ul>
+            <li>Promoted after seven months; led daily floor operations for the data collection team: scheduling, work assignment, and coverage through disruptions.</li>
+            <li>Owned data quality: validated robot training and evaluation data before it entered the training pipeline, and tracked throughput and quality KPIs.</li>
+            <li>Primary floor contact for ML, robotics and hardware engineers: escalated defects, blockers and process bottlenecks.</li>
+            <li>Trained 70+ operators and wrote the SOPs, troubleshooting guides and safety training the floor runs on.</li>
+            <li>Maintained a 150-robot humanoid fleet; cut downtime with hardware troubleshooting and Foxglove/SSH diagnostics.</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div class="when">Feb 2025 – Aug 2025</div>
+        <div class="what">
+          <h3>Research &amp; Development Operator</h3>
+          <p class="org">The Bot Company · San Francisco</p>
+          <ul>
+            <li>Teleoperated robots (VR, haptic and handheld controllers) to collect real-world household task data.</li>
+            <li>Ran pick-and-place manipulation, robot recovery and scene resets; validated data for accuracy and consistency.</li>
+            <li>Diagnosed sensors, actuators, connectors and mechanical assemblies; used Foxglove telemetry and SSH daily.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="earlier">
+        <div class="when">2012 – 2020</div>
+        <div class="what">
+          <h3>Data operations &amp; QA</h3>
+          <p class="org">A decade of accuracy-critical data work across fintech, airline, healthcare and mortgage accounts</p>
+          <ul class="compact">
+            <li><b>Data Operations Analyst</b> · ECE Consulting Group, Robinhood account <span>2018–2020</span></li>
+            <li><b>Customer Care Specialist</b> · Concentrix, United Airlines MileagePlus <span>2016–2017</span></li>
+            <li><b>Senior Process Executive</b> · Cognizant, Computershare <span>2015</span></li>
+            <li><b>Insurance Verification Specialist</b> · Arriva Medical <span>2014–2015</span></li>
+            <li><b>Medical Chart Specialist</b> · Altegra Health <span>2014</span></li>
+            <li><b>Senior Business Process Associate</b> · UST Global, Title Source <span>2012–2014</span></li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section">
+    <div class="section-head">
+      <p class="eyebrow">Skills</p>
+      <h2>What I bring</h2>
+    </div>
+    <div class="skills">
+      <div class="skill-card">
+        <h3>Floor operations &amp; leadership</h3>
+        <p>Shift execution, operator scheduling, coverage planning, training and coaching, SOP writing, safety protocols and incident escalation.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Robotics hands-on</h3>
+        <p>Fleet maintenance and firmware rollout, hardware troubleshooting, Foxglove telemetry, SSH and Linux, teleoperation, pick-and-place, robot recovery.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Robotics software</h3>
+        <p>Forward and inverse kinematics (analytic, Jacobian, CCD), motion planning, multi-arm collision checking, 3D visualization with three.js.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Data &amp; analytics</h3>
+        <p>Ops KPI design (QA pass rate, MTBF/MTTR, utilization, cost per episode), data validation, predictive maintenance scoring, Excel and SQL.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Engineering</h3>
+        <p>Python (FastAPI, NumPy, pandas, pytest), SQL, React + TypeScript, Docker, Git/GitHub, cloud deployment on Render.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Education</h3>
+        <p>Full-Stack Web Development (MERN), Zuitt Coding Bootcamp, 2022–2023. B.S. Information Technology coursework, Northeastern College and Isabela State University.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="contact">
+    <h2>Let's talk robots.</h2>
+    <p>I'm looking for robotics operations and fleet roles where I can keep robots running and build the tools that help teams do it.</p>
+    <div class="cta">
+      <a class="btn" href="mailto:timdayaherrera@gmail.com">Email me</a>
+      <a class="btn btn-ghost" href="https://linkedin.com/in/timothy-herrera" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="assets/Timothy_Herrera_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <span>© 2026 Timothy Herrera</span>
+  <span>Hand-built: HTML, CSS and a little inverse kinematics.</span>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
