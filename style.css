@@ -134,6 +134,37 @@ main > section { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
   cursor: crosshair;
   touch-action: none;
 }
+.arm-stage { position: relative; }
+.arm-ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+.arm-status {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(10, 15, 26, 0.75);
+  border: 1px solid var(--line);
+  color: #c3cddd;
+  font-size: 0.8rem;
+}
+.arm-reset {
+  pointer-events: auto;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font: 500 0.8rem Inter, sans-serif;
+  cursor: pointer;
+}
+.arm-reset:hover { border-color: var(--cyan); }
 .hero-arm figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 0.6rem; }
 
 /* Stats */

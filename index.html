@@ -58,8 +58,14 @@
       </ul>
     </div>
     <figure class="hero-arm">
-      <canvas id="arm" aria-label="A robot arm that reaches toward your cursor using inverse kinematics"></canvas>
-      <figcaption>Move your mouse: this arm solves the same analytic inverse kinematics as my <a href="#arm-sim">simulator</a>.</figcaption>
+      <div class="arm-stage">
+        <canvas id="arm" aria-label="A robot arm next to a Jenga tower. Hold the mouse on a block to pick it up, let go to drop it."></canvas>
+        <div class="arm-ui">
+          <span id="arm-status" class="arm-status" aria-live="polite">Hold the mouse on a block to pick it up.</span>
+          <button id="arm-reset" class="arm-reset" type="button">Reset tower</button>
+        </div>
+      </div>
+      <figcaption>Hold the mouse on a Jenga block: the arm reaches for it with the same inverse kinematics as my <a href="#arm-sim">simulator</a>. Drag to carry, let go to drop. Real physics: it balances or it falls.</figcaption>
     </figure>
   </section>
 
@@ -226,6 +232,7 @@
   <span>Hand-built: HTML, CSS and a little inverse kinematics.</span>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
