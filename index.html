@@ -12,13 +12,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
 <header class="nav">
   <a class="brand" href="#top" aria-label="Back to top"><span class="brand-mark">TH</span><span class="brand-name">Timothy Herrera</span></a>
   <nav>
+    <a href="#play">Play</a>
     <a href="#projects">Projects</a>
     <a href="#experience">Experience</a>
     <a href="#skills">Skills</a>
@@ -29,35 +30,112 @@
 
 <main id="top">
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-text">
-      <div class="who">
-        <img class="avatar" src="assets/profile.png" alt="Timothy Herrera" width="96" height="96">
-        <div>
-          <p class="who-name">Timothy Herrera</p>
-          <p class="who-role">Robotics Operations Lead · San Francisco</p>
-        </div>
-      </div>
-      <p class="eyebrow">Robotics Operations · Fleet Ops · Builder</p>
-      <h1>I keep robots running, and I build the tools that help.</h1>
+  <!-- Hero: my two-arm robot, live in 3D, standing in a beam of light -->
+  <section class="hero2" aria-labelledby="hero-title">
+    <div class="sky" aria-hidden="true">
+      <canvas id="stars"></canvas>
+      <div class="beam"><span class="beam-core"></span><span class="beam-glow"></span></div>
+      <div class="horizon"></div>
+      <div class="floor-grid"></div>
+    </div>
+
+    <div class="hero2-text">
+      <a class="pill" href="#projects"><span class="pill-dot"></span>AI robotics · fleet ops · simulation<span class="pill-arrow">→</span></a>
+      <h1 id="hero-title">I keep robots running.<br><span class="grad">I build the AI tools that help.</span></h1>
       <p class="lead">
-        I ran day-to-day floor operations for a robot data-collection team and kept a <b>150-robot humanoid fleet</b>
-        deploy-ready at an AI robotics startup in San Francisco. Now I build the software I wished I'd had on the floor:
-        fleet dashboards and robot simulators.
+        I kept a <b>150-robot humanoid fleet</b> deploy-ready at an AI robotics startup in San Francisco.
+        Now I build what I wished I'd had on the floor: fleet dashboards and robot simulators.
       </p>
       <div class="cta">
-        <a class="btn" href="#projects">See my projects</a>
+        <a class="btn btn-glow" href="#projects">See my projects</a>
         <a class="btn btn-ghost" href="assets/Timothy_Herrera_Resume.pdf" target="_blank" rel="noopener">Download resume</a>
+      </div>
+    </div>
+
+    <figure class="robot-stage">
+      <canvas id="robot3d" aria-label="My two-armed mobile robot, rendered live in 3D. It turns to follow your cursor; press Say hi and it waves."></canvas>
+      <div class="boot" id="robot-boot" aria-hidden="true"><span>Loading model…</span></div>
+      <div class="callouts" id="robot-callouts" aria-hidden="true">
+        <span class="callout" data-node="head_tilt" data-side="L"><b>Head camera</b>perception</span>
+        <span class="callout" data-node="R_j3" data-side="L"><b>7-DoF arm</b>inverse kinematics</span>
+        <span class="callout" data-node="L_j6" data-side="R"><b>Wrist camera</b>grasp view</span>
+        <span class="callout" data-node="carriage" data-side="R"><b>Torso lift</b>rides the column</span>
+      </div>
+      <div class="stage-ui">
+        <span class="stage-tag"><span class="live-dot"></span>HMN-2 · two-arm mobile manipulator</span>
+        <button class="stage-btn" id="robot-wave" type="button">Say hi</button>
+      </div>
+      <figcaption class="sr-only">The same robot model that runs in my Robot Simulator, exported from the simulator and rendered here with three.js.</figcaption>
+    </figure>
+
+    <div class="who who-row">
+      <img class="avatar" src="assets/profile.png" alt="Timothy Herrera" width="56" height="56">
+      <div>
+        <p class="who-name">Timothy Herrera</p>
+        <p class="who-role">Robotics Operations Lead · San Francisco</p>
       </div>
       <ul class="socials">
         <li><a href="https://linkedin.com/in/timothy-herrera" target="_blank" rel="noopener">LinkedIn</a></li>
         <li><a href="https://github.com/timHfleet" target="_blank" rel="noopener">GitHub</a></li>
         <li><a href="mailto:timdayaherrera@gmail.com">Email</a></li>
-        <li class="muted">San Francisco, CA</li>
       </ul>
     </div>
-    <figure class="hero-arm">
+
+    <!-- Fleet console: a mock of the kind of tool I build (simulated data) -->
+    <div class="console-wrap">
+      <div class="console" id="console">
+        <div class="console-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="console-title">fleet-console · floor 2</span>
+          <span class="console-sim">simulated data</span>
+        </div>
+        <div class="console-body">
+          <div class="kpis">
+            <div><span class="k-lbl">Robots online</span><span class="k-val" data-kpi="online">147<small>/150</small></span></div>
+            <div><span class="k-lbl">Tasks today</span><span class="k-val" data-kpi="tasks">1,284</span></div>
+            <div><span class="k-lbl">Avg battery</span><span class="k-val" data-kpi="batt">82%</span></div>
+            <div><span class="k-lbl">Interventions</span><span class="k-val" data-kpi="ints">3</span></div>
+          </div>
+          <div class="console-grid">
+            <div class="panel">
+              <p class="panel-h">Throughput · tasks / min</p>
+              <canvas id="spark" height="120"></canvas>
+            </div>
+            <div class="panel">
+              <p class="panel-h">Robots</p>
+              <ul class="robots" id="robot-list">
+                <li><span class="rid">HMN-07</span><span class="chip ok">Folding towels</span><span class="bat"><i style="--b:76%"></i></span></li>
+                <li><span class="rid">HMN-12</span><span class="chip ok">Loading dishwasher</span><span class="bat"><i style="--b:64%"></i></span></li>
+                <li><span class="rid">HMN-23</span><span class="chip warn">Firmware 4.2.1</span><span class="bat"><i style="--b:91%"></i></span></li>
+                <li><span class="rid">HMN-31</span><span class="chip idle">Charging</span><span class="bat"><i style="--b:22%"></i></span></li>
+                <li><span class="rid">HMN-44</span><span class="chip ok">Sorting blocks</span><span class="bat"><i style="--b:58%"></i></span></li>
+              </ul>
+            </div>
+            <div class="panel log-panel">
+              <p class="panel-h">Event log</p>
+              <ol class="log" id="log" aria-live="off"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Numbers -->
+  <section class="stats" aria-label="Highlights">
+    <div><span class="num">150</span><span class="lbl">humanoid robots kept firmware-current and deploy-ready</span></div>
+    <div><span class="num">70+</span><span class="lbl">operators onboarded and trained</span></div>
+    <div><span class="num">7 mo</span><span class="lbl">from R&amp;D Operator to Shift Supervisor</span></div>
+    <div><span class="num">10+ yrs</span><span class="lbl">in data operations and QA before robotics</span></div>
+  </section>
+
+  <!-- Play: the Jenga arm -->
+  <section class="section play" id="play">
+    <div class="section-head">
+      <p class="eyebrow">Play</p>
+      <h2>Pick a block. The arm does the math.</h2>
+    </div>
+    <figure class="hero-arm play-arm">
       <div class="arm-stage">
         <canvas id="arm" aria-label="A robot arm next to a Jenga tower. Hold the mouse on a block to pick it up, let go to drop it."></canvas>
         <div class="arm-ui">
@@ -69,14 +147,6 @@
       </div>
       <figcaption>Hold the mouse on a Jenga block: the arm reaches for it with the same inverse kinematics as my <a href="#arm-sim">simulator</a>. Drag to carry, let go to drop. Real physics: it balances or it falls.</figcaption>
     </figure>
-  </section>
-
-  <!-- Numbers -->
-  <section class="stats" aria-label="Highlights">
-    <div><span class="num">150</span><span class="lbl">humanoid robots kept firmware-current and deploy-ready</span></div>
-    <div><span class="num">70+</span><span class="lbl">operators onboarded and trained</span></div>
-    <div><span class="num">7 mo</span><span class="lbl">from R&amp;D Operator to Shift Supervisor</span></div>
-    <div><span class="num">10+ yrs</span><span class="lbl">in data operations and QA before robotics</span></div>
   </section>
 
   <!-- Projects -->
@@ -242,7 +312,10 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-<script src="main.js?v=2"></script>
-<script src="interactions.js?v=2"></script>
+<script src="main.js?v=3"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module" src="hero3d.js?v=4"></script>
+<script src="console.js?v=1"></script>
+<script src="interactions.js?v=3"></script>
 </body>
 </html>

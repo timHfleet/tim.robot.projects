@@ -552,8 +552,8 @@
   }
   canvas.addEventListener('pointerup', release)
   canvas.addEventListener('pointercancel', release)
-  // Follow the mouse anywhere over the hero, not only inside the canvas.
-  document.querySelector('.hero')?.addEventListener('pointermove', (e) => {
+  // Follow the mouse anywhere over the play section, not only inside the canvas.
+  document.querySelector('.play')?.addEventListener('pointermove', (e) => {
     if (!pressed) onMove(e)
   })
   resetBtn?.addEventListener('click', () => buildWorld())
