@@ -476,6 +476,8 @@
   function tick(now) {
     const dt = Math.min(0.05, (now - last) / 1000)
     last = now
+    // Paused while hidden behind the Fold-Off tab: with no size yet, the maths would go NaN.
+    if (!W || canvas.offsetParent === null) { requestAnimationFrame(tick); return }
     const t = currentTarget(now)
     const goal = solve(t)
     if (goal) {
@@ -499,7 +501,6 @@
       }
     }
     requestAnimationFrame(tick)
-    if (!W || canvas.offsetParent === null) return
     draw(pointer && (pressed || held || now - lastMove <= 4000) && !reaching ? pointer : null)
   }
 
