@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 
@@ -135,9 +135,13 @@
     <div class="section-head">
       <p class="eyebrow">Play</p>
       <h2>Take HMN-2's arm for a spin.</h2>
-      <p class="section-sub">The robot up top has two 7-joint arms. This is one of them, flattened to 2D, running the same inverse kinematics: you pick the block, it works out the joint angles.</p>
+      <p class="section-sub">Two mini games built on the robot up top. Jenga uses one of its 7-joint arms, flattened to 2D, with the same inverse kinematics. Fold-Off uses both arms to fold a towel, the task it runs in my simulator.</p>
     </div>
-    <figure class="hero-arm play-arm">
+    <div class="game-tabs" role="tablist" aria-label="Mini games">
+      <button type="button" role="tab" id="tab-jenga" aria-controls="game-jenga" aria-selected="true">Jenga</button>
+      <button type="button" role="tab" id="tab-fold" aria-controls="game-fold" aria-selected="false" tabindex="-1">Fold-Off <span class="tab-new">new</span></button>
+    </div>
+    <figure class="hero-arm play-arm" id="game-jenga" role="tabpanel" aria-labelledby="tab-jenga">
       <div class="arm-stage">
         <canvas id="arm" aria-label="A robot arm next to a Jenga tower. Hold the mouse on a block to pick it up, let go to drop it."></canvas>
         <div class="arm-ui">
@@ -148,6 +152,17 @@
         </div>
       </div>
       <figcaption>Hold the mouse on a Jenga block: the arm reaches for it with the same inverse kinematics as my <a href="#arm-sim">simulator</a>. Drag to carry, let go to drop. Real physics: it balances or it falls.</figcaption>
+    </figure>
+    <figure class="hero-arm play-arm" id="game-fold" role="tabpanel" aria-labelledby="tab-fold" hidden>
+      <div class="arm-stage">
+        <canvas id="fold" aria-label="A towel on a folding table, seen from above, with the robot's two arms. Click two points on the towel's edge, then drag to where to lay them down to fold it."></canvas>
+        <div class="arm-ui">
+          <span id="fold-status" class="arm-status" aria-live="polite">Click the towel's edge to place the first gripper.</span>
+          <span id="fold-score" class="arm-score" aria-live="off">Folds 0/2 · 0.0 s · Regrasps 0 · Best 0</span>
+          <button id="fold-reset" class="arm-reset" type="button">New towel</button>
+        </div>
+      </div>
+      <figcaption>Fold the towel into quarters in two folds. Click two points on its edge for the grippers, then drag to where they should lay the flap down: the fold line is halfway between. You score on neatness, then time; every missed grab costs a regrasp. Right-click lets go.</figcaption>
     </figure>
   </section>
 
@@ -314,10 +329,11 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-<script src="main.js?v=3"></script>
+<script src="main.js?v=4"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 <script type="module" src="hero3d.js?v=6"></script>
 <script src="console.js?v=2"></script>
-<script src="interactions.js?v=3"></script>
+<script src="interactions.js?v=4"></script>
+<script src="fold.js?v=2"></script>
 </body>
 </html>

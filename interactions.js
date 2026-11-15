@@ -126,4 +126,29 @@
       })
     })
   }
+
+  // --- Play: switch between the mini games --------------------------------------------
+  const tabs = [...document.querySelectorAll('.game-tabs [role="tab"]')]
+  const select = (tab) => {
+    for (const t of tabs) {
+      const on = t === tab
+      t.setAttribute('aria-selected', String(on))
+      t.tabIndex = on ? 0 : -1
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on
+    }
+    // The Jenga canvas sizes itself on window resize; nudge it if the window changed while hidden.
+    const arm = document.getElementById('arm')
+    if (tab.id === 'tab-jenga' && arm && Math.abs(arm.width - Math.round(arm.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 2))) > 2) {
+      window.dispatchEvent(new Event('resize'))
+    }
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t))
+    t.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
+      const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]
+      select(next)
+      next.focus()
+    })
+  })
 })()

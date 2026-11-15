@@ -50,6 +50,7 @@
 
   function resize() {
     const r = canvas.getBoundingClientRect()
+    if (r.width < 10) return // hidden behind the Fold-Off tab; the tab switch resizes it again
     dpr = Math.min(window.devicePixelRatio || 1, 2)
     W = r.width
     H = r.height
@@ -497,8 +498,9 @@
         acc -= 1 / 60
       }
     }
-    draw(pointer && (pressed || held || now - lastMove <= 4000) && !reaching ? pointer : null)
     requestAnimationFrame(tick)
+    if (!W || canvas.offsetParent === null) return
+    draw(pointer && (pressed || held || now - lastMove <= 4000) && !reaching ? pointer : null)
   }
 
   // --- input ---------------------------------------------------------------------
