@@ -9,6 +9,7 @@
 // and toppling. Hold the mouse on a block and the arm reaches for it and
 // pinches it; drag to carry it; let go and it drops (keeping its momentum).
 // The gripper itself is a solid body too, so it can knock the tower over.
+// Show IK draws the geometry the solver uses; a score counts blocks moved before it falls.
 (() => {
   const canvas = document.getElementById('arm')
   if (!canvas) return
@@ -35,6 +36,14 @@
   let held = null // { body, offset, angle0 } while carrying
   let pressed = false
   let fallAnnounced = false
+  let showIK = false
+  let moved = 0 // blocks moved this round
+  let best = 0
+  try { best = +localStorage.getItem('jengaBest') || 0 } catch { /* storage blocked */ }
+  let qVel = [0, 0, 0] // joint speeds, for the status LEDs
+  const ikBtn = document.getElementById('arm-ik')
+  const scoreEl = document.getElementById('arm-score')
+  const updateScore = () => { if (scoreEl) scoreEl.textContent = `Moved ${moved} · Best ${best}` }
   const CAT_BLOCK = 0x0001
   const CAT_GRIPPER = 0x0002
   const CAT_WORLD = 0x0004
@@ -112,6 +121,8 @@
     reaching = null
     held = null
     fallAnnounced = false
+    moved = 0
+    updateScore()
     setStatus('Hold the mouse on a block to pick it up.')
   }
 
@@ -227,7 +238,12 @@
       const fallen = blocks.filter((b) => b.body !== held?.body && b.body.position.y > b.startY + thick * 1.5).length
       if (fallen >= 3) {
         fallAnnounced = true
-        setStatus('Timber! The tower fell. Press Reset to stack it again.')
+        if (moved > best) {
+          best = moved
+          try { localStorage.setItem('jengaBest', String(best)) } catch { /* storage blocked */ }
+        }
+        updateScore()
+        setStatus(`Timber! You moved ${moved} block${moved === 1 ? '' : 's'} before it fell. Reset to try again.`)
       }
     }
   }
@@ -305,60 +321,152 @@
       ctx.stroke()
     }
 
-    // Base.
-    ctx.fillStyle = '#1f2937'
-    ctx.beginPath()
-    ctx.roundRect(base.x - 34, base.y + 2, 68, groundY - base.y - 2, 5)
-    ctx.fill()
-    ctx.fillStyle = '#f472b6'
-    ctx.beginPath()
-    ctx.roundRect(base.x - 28, base.y - 6, 56, 10, 4)
-    ctx.fill()
-
-    // Links.
     const { pts, phi } = fk(q)
     const s = pts.map(P)
-    const widths = [22, 18, 12]
-    ctx.lineCap = 'round'
+
+    // Soft shadow of the arm on the table.
+    ctx.save()
+    ctx.fillStyle = 'rgba(0,0,0,0.28)'
+    ctx.filter = 'blur(6px)'
+    const sx0 = Math.min(...s.map((p) => p[0])) - 10
+    const sx1 = Math.max(...s.map((p) => p[0])) + 10
+    ctx.beginPath()
+    ctx.ellipse((sx0 + sx1) / 2, groundY + 6, (sx1 - sx0) / 2, 5, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.restore()
+
+    // Pedestal: a dark column with bolts on a wide foot, and a turntable plate.
+    ctx.fillStyle = '#111827'
+    ctx.beginPath(); ctx.roundRect(base.x - 46, groundY - 10, 92, 12, 4); ctx.fill()
+    const ped = ctx.createLinearGradient(base.x - 30, 0, base.x + 30, 0)
+    ped.addColorStop(0, '#1f2937'); ped.addColorStop(0.45, '#374151'); ped.addColorStop(1, '#111827')
+    ctx.fillStyle = ped
+    ctx.beginPath(); ctx.roundRect(base.x - 28, base.y + 6, 56, groundY - base.y - 14, 6); ctx.fill()
+    ctx.fillStyle = '#9ca3af'
+    for (const bx of [-36, 36]) { ctx.beginPath(); ctx.arc(base.x + bx, groundY - 4, 2.2, 0, Math.PI * 2); ctx.fill() }
+    const tt = ctx.createLinearGradient(base.x - 34, 0, base.x + 34, 0)
+    tt.addColorStop(0, '#e5e7eb'); tt.addColorStop(0.5, '#ffffff'); tt.addColorStop(1, '#9ca3af')
+    ctx.fillStyle = tt
+    ctx.beginPath(); ctx.roundRect(base.x - 34, base.y - 2, 68, 10, 4); ctx.fill()
+    ctx.fillStyle = '#f97316'
+    ctx.fillRect(base.x - 34, base.y + 5, 68, 2)
+
+    // Links: tapered metal shells lit from one side, an orange accent stripe, and a cable.
+    const halfW = [[13, 10], [10, 7.5], [6.5, 5]]
     for (let i = 0; i < 3; i++) {
-      ctx.strokeStyle = '#0b1220'
-      ctx.lineWidth = widths[i] + 6
-      ctx.beginPath(); ctx.moveTo(...s[i]); ctx.lineTo(...s[i + 1]); ctx.stroke()
-      const g = ctx.createLinearGradient(...s[i], ...s[i + 1])
-      g.addColorStop(0, '#e2e8f0'); g.addColorStop(1, '#94a3b8')
-      ctx.strokeStyle = g
-      ctx.lineWidth = widths[i]
-      ctx.beginPath(); ctx.moveTo(...s[i]); ctx.lineTo(...s[i + 1]); ctx.stroke()
+      const [x0, y0] = s[i]
+      const [x1, y1] = s[i + 1]
+      const len = Math.hypot(x1 - x0, y1 - y0) || 1
+      const ux = (x1 - x0) / len, uy = (y1 - y0) / len
+      const nx = -uy, ny = ux
+      const [w0, w1] = halfW[i]
+      ctx.beginPath()
+      ctx.moveTo(x0 + nx * w0, y0 + ny * w0)
+      ctx.lineTo(x1 + nx * w1, y1 + ny * w1)
+      ctx.lineTo(x1 - nx * w1, y1 - ny * w1)
+      ctx.lineTo(x0 - nx * w0, y0 - ny * w0)
+      ctx.closePath()
+      const g = ctx.createLinearGradient(x0 + nx * w0, y0 + ny * w0, x0 - nx * w0, y0 - ny * w0)
+      g.addColorStop(0, '#f8fafc'); g.addColorStop(0.45, '#cbd5e1'); g.addColorStop(1, '#64748b')
+      ctx.fillStyle = g
+      ctx.fill()
+      ctx.strokeStyle = 'rgba(15,23,42,0.85)'
+      ctx.lineWidth = 1.5
+      ctx.stroke()
       if (i < 2) {
         ctx.strokeStyle = '#f97316'
-        ctx.lineWidth = 3
-        ctx.beginPath(); ctx.moveTo(...s[i]); ctx.lineTo(...s[i + 1]); ctx.stroke()
+        ctx.lineWidth = 2.5
+        ctx.beginPath()
+        ctx.moveTo(x0 + ux * 18, y0 + uy * 18)
+        ctx.lineTo(x1 - ux * 16, y1 - uy * 16)
+        ctx.stroke()
       }
-    }
-    for (let i = 0; i < 3; i++) {
-      ctx.fillStyle = '#0b1220'
-      ctx.beginPath(); ctx.arc(...s[i], i === 0 ? 15 : 12, 0, 2 * Math.PI); ctx.fill()
-      ctx.strokeStyle = '#22d3ee'
-      ctx.lineWidth = 3
-      ctx.beginPath(); ctx.arc(...s[i], i === 0 ? 11 : 8, 0, 2 * Math.PI); ctx.stroke()
+      const sag = 4 + i * 2
+      ctx.strokeStyle = '#0f172a'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(x0 - nx * (w0 + 2), y0 - ny * (w0 + 2))
+      ctx.quadraticCurveTo((x0 + x1) / 2 - nx * (w0 + sag), (y0 + y1) / 2 - ny * (w0 + sag) + 2, x1 - nx * (w1 + 2), y1 - ny * (w1 + 2))
+      ctx.stroke()
     }
 
-    // Gripper: palm and two fingers that close as `grip` goes to 0.
+    // Actuator housings: dark drum, metal face, bolts and a status LED
+    // (green idle, cyan moving, orange while carrying a block).
+    const radii = [17, 13.5, 10]
+    for (let i = 0; i < 3; i++) {
+      const [x, y] = s[i]
+      const r = radii[i]
+      ctx.fillStyle = '#0b1220'
+      ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2); ctx.fill()
+      const fg = ctx.createRadialGradient(x - r * 0.4, y - r * 0.4, 1, x, y, r)
+      fg.addColorStop(0, '#f1f5f9'); fg.addColorStop(1, '#475569')
+      ctx.fillStyle = fg
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill()
+      ctx.fillStyle = '#1e293b'
+      for (let k = 0; k < 6; k++) {
+        const a = (k / 6) * Math.PI * 2 + i
+        ctx.beginPath(); ctx.arc(x + Math.cos(a) * r * 0.72, y + Math.sin(a) * r * 0.72, 1.3, 0, Math.PI * 2); ctx.fill()
+      }
+      const moving = Math.abs(qVel[i]) > 0.15
+      const led = held ? '#f97316' : moving ? '#22d3ee' : '#22c55e'
+      ctx.fillStyle = led
+      ctx.shadowColor = led
+      ctx.shadowBlur = 10
+      ctx.beginPath(); ctx.arc(x, y, r * 0.28, 0, Math.PI * 2); ctx.fill()
+      ctx.shadowBlur = 0
+    }
+
+    // Gripper: wrist flange, palm, and two parallel fingers with orange pads that slide
+    // together as `grip` goes to 0.
     const tip = s[3]
     const d = [Math.cos(phi), -Math.sin(phi)]
     const n = [-d[1], d[0]]
-    const open = 4 + 8 * grip
-    ctx.strokeStyle = '#cbd5e1'
-    ctx.lineWidth = 4
-    for (const k of [-1, 1]) {
-      const bx = tip[0] - d[0] * 14 + n[0] * k * open
-      const by = tip[1] - d[1] * 14 + n[1] * k * open
-      ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + d[0] * 15, by + d[1] * 15); ctx.stroke()
+    const at = (along, side) => [tip[0] + d[0] * along + n[0] * side, tip[1] + d[1] * along + n[1] * side]
+    const quad = (pp, fill) => {
+      ctx.beginPath(); ctx.moveTo(...pp[0]); for (const p of pp.slice(1)) ctx.lineTo(...p); ctx.closePath()
+      ctx.fillStyle = fill; ctx.fill()
+      ctx.strokeStyle = 'rgba(15,23,42,0.9)'; ctx.lineWidth = 1; ctx.stroke()
     }
-    ctx.beginPath()
-    ctx.moveTo(tip[0] - d[0] * 14 - n[0] * (open + 2), tip[1] - d[1] * 14 - n[1] * (open + 2))
-    ctx.lineTo(tip[0] - d[0] * 14 + n[0] * (open + 2), tip[1] - d[1] * 14 + n[1] * (open + 2))
-    ctx.stroke()
+    quad([at(-24, -6), at(-24, 6), at(-18, 6), at(-18, -6)], '#94a3b8')
+    quad([at(-18, -13), at(-18, 13), at(-11, 13), at(-11, -13)], '#1f2937')
+    const open = 3 + 8 * grip
+    for (const k of [-1, 1]) {
+      const o = k * open
+      quad([at(-11, o - k * 2.5), at(-11, o + k * 2.5), at(3, o + k * 2.5), at(3, o - k * 2.5)], '#e2e8f0')
+      quad([at(-4, o - k * 2.5), at(-4, o - k * 4), at(3, o - k * 4), at(3, o - k * 2.5)], '#f97316')
+    }
+
+    if (showIK) drawIK(s, pts)
+  }
+
+  // Inverse-kinematics overlay: the shoulder-elbow-wrist triangle the law of cosines
+  // solves, the wrist point, the tool link, and live joint angles.
+  function drawIK(s, pts) {
+    ctx.save()
+    ctx.setLineDash([4, 4])
+    ctx.strokeStyle = 'rgba(34,211,238,0.9)'
+    ctx.lineWidth = 1.5
+    ctx.beginPath(); ctx.moveTo(...s[0]); ctx.lineTo(...s[1]); ctx.lineTo(...s[2]); ctx.closePath(); ctx.stroke()
+    ctx.strokeStyle = 'rgba(249,115,22,0.9)'
+    ctx.beginPath(); ctx.moveTo(...s[2]); ctx.lineTo(...s[3]); ctx.stroke()
+    ctx.setLineDash([])
+    const label = (p, text, dx, dy) => {
+      ctx.font = '600 11px "JetBrains Mono", monospace'
+      const w = ctx.measureText(text).width + 8
+      ctx.fillStyle = 'rgba(10,15,26,0.85)'
+      ctx.fillRect(p[0] + dx, p[1] + dy - 11, w, 16)
+      ctx.fillStyle = '#e6ebf4'
+      ctx.fillText(text, p[0] + dx + 4, p[1] + dy + 1)
+    }
+    const deg = (a) => `${Math.round((a * 180) / Math.PI)}°`
+    label(s[0], `θ1 ${deg(q[0])}`, 22, -18)
+    label(s[1], `θ2 ${deg(q[1])}`, 18, -16)
+    label(s[2], `θ3 ${deg(q[2])}`, 14, -14)
+    ctx.fillStyle = '#22d3ee'
+    ctx.beginPath(); ctx.arc(...s[2], 4, 0, Math.PI * 2); ctx.fill()
+    const tipM = pts[3]
+    label(s[3], `tool (${tipM.x.toFixed(2)}, ${tipM.y.toFixed(2)}) m`, 14, 24)
+    ctx.restore()
   }
 
   // --- main loop -----------------------------------------------------------------
@@ -371,10 +479,12 @@
     const goal = solve(t)
     if (goal) {
       const maxStep = (reduce ? 1.4 : 3.4) * dt // servo speed limit (rad per frame)
+      const q0 = q
       q = q.map((v, i) => {
         const e = wrap(goal[i] - v)
         return v + Math.max(-maxStep, Math.min(maxStep, e * 0.2 + Math.sign(e) * Math.min(Math.abs(e), maxStep * 0.4)))
       })
+      qVel = q.map((v, i) => (dt > 0 ? (v - q0[i]) / dt : 0))
     }
     grip += ((held ? 0 : 1) - grip) * Math.min(1, dt * 12)
 
@@ -429,7 +539,11 @@
       const s = Math.hypot(v.x, v.y)
       if (s > 18) M.Body.setVelocity(b, { x: (v.x * 18) / s, y: (v.y * 18) / s })
       held = null
-      if (!fallAnnounced) setStatus('Dropped. Will it balance?')
+      if (!fallAnnounced) {
+        moved++
+        updateScore()
+        setStatus(`Dropped. Will it balance? (${moved} moved)`)
+      }
     } else if (reaching) {
       reaching.body.collisionFilter.mask = CAT_BLOCK | CAT_GRIPPER | CAT_WORLD
       setStatus('Let go too early: hold until the fingers close.')
@@ -443,6 +557,11 @@
     if (!pressed) onMove(e)
   })
   resetBtn?.addEventListener('click', () => buildWorld())
+  ikBtn?.addEventListener('click', () => {
+    showIK = !showIK
+    ikBtn.setAttribute('aria-pressed', String(showIK))
+    ikBtn.textContent = showIK ? 'Hide IK' : 'Show IK'
+  })
   // Debug view of the physics state (only with ?debug in the URL).
   if (location.search.includes('debug')) {
     window.__jenga = () => ({

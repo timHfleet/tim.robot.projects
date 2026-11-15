@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -62,6 +62,8 @@
         <canvas id="arm" aria-label="A robot arm next to a Jenga tower. Hold the mouse on a block to pick it up, let go to drop it."></canvas>
         <div class="arm-ui">
           <span id="arm-status" class="arm-status" aria-live="polite">Hold the mouse on a block to pick it up.</span>
+          <span id="arm-score" class="arm-score" aria-live="polite">Moved 0 · Best 0</span>
+          <button id="arm-ik" class="arm-reset" type="button" aria-pressed="false">Show IK</button>
           <button id="arm-reset" class="arm-reset" type="button">Reset tower</button>
         </div>
       </div>
@@ -100,7 +102,8 @@
         </ul>
         <ul class="chips"><li>React</li><li>TypeScript</li><li>three.js</li><li>Rapier</li><li>Cloth simulation</li><li>MuJoCo</li><li>Python</li></ul>
         <div class="links">
-          <a class="btn btn-small" href="https://robot-2arms-sim.onrender.com" target="_blank" rel="noopener">Live demo</a>
+          <button class="btn btn-small" type="button" data-demo="https://robot-2arms-sim.onrender.com">Try it here</button>
+          <a class="btn btn-small btn-ghost" href="https://robot-2arms-sim.onrender.com" target="_blank" rel="noopener">Open full screen</a>
           <a class="btn btn-small btn-ghost" href="https://github.com/timHfleet/robot-simulation" target="_blank" rel="noopener">Code</a>
         </div>
       </div>
@@ -239,6 +242,7 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-<script src="main.js"></script>
+<script src="main.js?v=2"></script>
+<script src="interactions.js?v=2"></script>
 </body>
 </html>
