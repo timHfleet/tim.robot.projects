@@ -118,6 +118,8 @@
     ['info', 'IK solved · 7 joints in limits'],
     ['warn', 'regrasp · cloth slipped'],
     ['ok', 'dishwasher rack loaded'],
+    ['warn', 'base cam · table 42 cm ahead · slowing'],
+    ['info', 'base cams · 360° clear'],
   ]
   const pad = (n) => String(n).padStart(2, '0')
   const addLog = () => {

@@ -558,9 +558,11 @@ main > section.hero2 { width: 100%; }
   .callout b { font-size: 0.66rem; }
   .beam { width: 300px; }
   .pill { font-size: 0.64rem; letter-spacing: 0.02em; white-space: nowrap; gap: 0.4rem; }
-  .callout[data-node="R_j3"], .callout[data-node="carriage"] { display: none; }
+  .callout[data-node="R_j3"], .callout[data-node="carriage"], .callout[data-node="L_j6"] { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .beam-core, .beam-glow, .pill-dot, .live-dot, .boot span { animation: none; }
   .console { transform: none !important; opacity: 1 !important; }
 }
+
+.section-sub { color: var(--muted); max-width: 44rem; margin: 0.8rem 0 0; }

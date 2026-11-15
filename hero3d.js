@@ -98,7 +98,7 @@ function start() {
   const turn = new THREE.Group()
   scene.add(turn)
 
-  const rig = { L: [], R: [], head: null, tilt: null, carriage: null, nodes: {} }
+  const rig = { L: [], R: [], head: null, tilt: null, carriage: null, nodes: {}, sectors: null }
   let ready = false
   let height = 1.5
 
@@ -130,7 +130,7 @@ function start() {
   }
 
   new GLTFLoader().load(
-    'assets/robot.glb',
+    'assets/robot.glb?v=2',
     (gltf) => {
       const model = gltf.scene
       model.rotation.y = -Math.PI / 2
@@ -149,6 +149,20 @@ function start() {
           // Status LEDs and light strips glow a touch more in the dark hero.
           if (o.material.emissive && o.material.emissiveIntensity > 0.2) o.material.emissiveIntensity *= 1.4
         }
+      })
+      // What the four base cameras watch: a floor sector off each face of the base. A scan
+      // sweeps round them in turn (the simulator uses them to slow down before a collision).
+      rig.sectors = [0, Math.PI / 2, Math.PI, -Math.PI / 2].map((yaw, i) => {
+        const end = i % 2 === 0
+        const r0 = end ? 0.37 : 0.33
+        const span = end ? 1.1 : 1.4
+        const m = new THREE.MeshBasicMaterial({ color: '#22d3ee', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide })
+        const mesh = new THREE.Mesh(new THREE.RingGeometry(r0, r0 + 0.45, 40, 1, -span / 2, span), m)
+        mesh.rotation.x = -Math.PI / 2 // lay it flat; ring angle 0 is the robot's forward (+x)
+        mesh.rotation.z = yaw
+        mesh.position.y = 0.006
+        model.add(mesh)
+        return { m, yaw }
       })
       for (const s of ['L', 'R']) {
         for (let i = 0; i < 7; i++) {
@@ -275,6 +289,10 @@ function start() {
       ring.material.opacity = (1 - k) * 0.8
     } else ring.material.opacity = 0
     disc.material.opacity = 0.85 + (animate ? Math.sin(t * 2) * 0.15 : 0)
+    if (rig.sectors) {
+      const sweep = t * 1.4
+      for (const sc of rig.sectors) sc.m.opacity = animate ? 0.05 + 0.3 * Math.max(0, Math.cos(sweep - sc.yaw)) ** 6 : 0.12
+    }
 
     renderer.render(scene, camera)
     placeCallouts()

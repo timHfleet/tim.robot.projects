@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -59,6 +59,7 @@
         <span class="callout" data-node="head_tilt" data-side="L"><b>Head camera</b>perception</span>
         <span class="callout" data-node="R_j3" data-side="L"><b>7-DoF arm</b>inverse kinematics</span>
         <span class="callout" data-node="L_j6" data-side="R"><b>Wrist camera</b>grasp view</span>
+        <span class="callout" data-node="baseCam_front" data-side="L"><b>4 base cameras</b>collision gauge</span>
         <span class="callout" data-node="carriage" data-side="R"><b>Torso lift</b>rides the column</span>
       </div>
       <div class="stage-ui">
@@ -133,7 +134,8 @@
   <section class="section play" id="play">
     <div class="section-head">
       <p class="eyebrow">Play</p>
-      <h2>Pick a block. The arm does the math.</h2>
+      <h2>Take HMN-2's arm for a spin.</h2>
+      <p class="section-sub">The robot up top has two 7-joint arms. This is one of them, flattened to 2D, running the same inverse kinematics: you pick the block, it works out the joint angles.</p>
     </div>
     <figure class="hero-arm play-arm">
       <div class="arm-stage">
@@ -167,7 +169,7 @@
         <ul>
           <li>A wheeled robot with a lift, rotating waist and two 7-joint arms: 7-DOF inverse kinematics, smooth trajectories and collision avoidance.</li>
           <li>Real physics, not glued grasps: Rapier rigid bodies for every item and a custom ~1,800-particle cloth simulation with self-collision and friction.</li>
-          <li>Towel folding modeled on commercial folding robots: pick a crumpled towel from a basket, catch a corner in mid-air, fling it flat, fold it twice and stack it, with head and wrist cameras.</li>
+          <li>Towel folding modeled on commercial folding robots: pick a crumpled towel from a basket, catch a corner in mid-air, fling it flat, fold it twice and stack it, with head and wrist cameras. Four base cameras gauge the room on every side, so it slows before it reaches a table and stops short of a collision.</li>
           <li>The same robot also runs in MuJoCo, with MJCF/URDF models generated from its joint table and 15 automated model checks.</li>
         </ul>
         <ul class="chips"><li>React</li><li>TypeScript</li><li>three.js</li><li>Rapier</li><li>Cloth simulation</li><li>MuJoCo</li><li>Python</li></ul>
@@ -314,8 +316,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 <script src="main.js?v=3"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="hero3d.js?v=4"></script>
-<script src="console.js?v=1"></script>
+<script type="module" src="hero3d.js?v=6"></script>
+<script src="console.js?v=2"></script>
 <script src="interactions.js?v=3"></script>
 </body>
 </html>
