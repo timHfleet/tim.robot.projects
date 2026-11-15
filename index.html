@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Timothy Herrera · Robotics Operations</title>
-<meta name="description" content="Timothy Herrera: robotics operations lead (150-robot humanoid fleet) who builds fleet dashboards and robot arm simulators.">
+<meta name="description" content="Timothy Herrera: robotics operations lead (150-robot humanoid fleet) who builds fleet dashboards and robot simulators.">
 <meta property="og:title" content="Timothy Herrera · Robotics Operations">
-<meta property="og:description" content="Ran the floor for a 150-robot humanoid fleet. Builds fleet dashboards and robot arm simulators.">
+<meta property="og:description" content="Ran the floor for a 150-robot humanoid fleet. Builds fleet dashboards and robot simulators.">
 <meta property="og:image" content="assets/arm-sim.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1220'/%3E%3Cpath d='M8 24 L14 13 L24 9' stroke='%2322d3ee' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='14' cy='13' r='2.6' fill='%23f97316'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,7 +44,7 @@
       <p class="lead">
         I ran day-to-day floor operations for a robot data-collection team and kept a <b>150-robot humanoid fleet</b>
         deploy-ready at an AI robotics startup in San Francisco. Now I build the software I wished I'd had on the floor:
-        fleet dashboards and robot-arm simulators.
+        fleet dashboards and robot simulators.
       </p>
       <div class="cta">
         <a class="btn" href="#projects">See my projects</a>
@@ -86,18 +86,19 @@
 
     <article class="project" id="arm-sim">
       <a class="shot" href="https://robot-2arms-sim.onrender.com" target="_blank" rel="noopener">
-        <img src="assets/arm-sim.png" alt="Robot Arm Simulator: two robot arms folding a red T-shirt together in a 3D scene" loading="lazy">
+        <img src="assets/arm-sim.png" alt="Robot Simulator: a two-armed mobile robot holding a towel stretched out over a table, next to a basket of towels" loading="lazy">
       </a>
       <div class="project-body">
         <p class="kicker">Nov 2026 · Robotics software</p>
-        <h3>Robot Arm Simulator</h3>
-        <p class="pitch">A 3D simulator for a 5-joint arm that plans pick-and-place, loads a dishwasher, and folds laundry with one arm or two.</p>
+        <h3>Robot Simulator</h3>
+        <p class="pitch">A two-armed mobile robot with real-time physics that sorts blocks, loads a dishwasher and washer, and folds towels from a basket, live in the browser.</p>
         <ul>
-          <li>Inverse kinematics solved three ways: analytic, Jacobian (damped least squares) and CCD.</li>
-          <li>Pick-and-place like real robots run it: camera scan, close-up correction, slow final approach, grip-force sensing, and recovery from slips and drops.</li>
-          <li>Two arms share the work with a frame-by-frame collision check: the dishwasher loads <b>1.7× faster</b>, and the arms fold a T-shirt in lockstep.</li>
+          <li>A wheeled robot with a lift, rotating waist and two 7-joint arms: 7-DOF inverse kinematics, smooth trajectories and collision avoidance.</li>
+          <li>Real physics, not glued grasps: Rapier rigid bodies for every item and a custom ~1,800-particle cloth simulation with self-collision and friction.</li>
+          <li>Towel folding modeled on commercial folding robots: pick a crumpled towel from a basket, catch a corner in mid-air, fling it flat, fold it twice and stack it, with head and wrist cameras.</li>
+          <li>The same robot also runs in MuJoCo, with MJCF/URDF models generated from its joint table and 15 automated model checks.</li>
         </ul>
-        <ul class="chips"><li>Python</li><li>FastAPI</li><li>NumPy</li><li>React</li><li>TypeScript</li><li>three.js</li><li>pytest · 68 tests</li></ul>
+        <ul class="chips"><li>React</li><li>TypeScript</li><li>three.js</li><li>Rapier</li><li>Cloth simulation</li><li>MuJoCo</li><li>Python</li></ul>
         <div class="links">
           <a class="btn btn-small" href="https://robot-2arms-sim.onrender.com" target="_blank" rel="noopener">Live demo</a>
           <a class="btn btn-small btn-ghost" href="https://github.com/timHfleet/robot-simulation" target="_blank" rel="noopener">Code</a>
